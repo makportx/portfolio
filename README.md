@@ -1,8 +1,15 @@
 # ISREL — Modern Django Portfolio & Resume Engine
 
+[![Live Portfolio](https://img.shields.io/badge/Live_Portfolio-GitHub_Pages-cyan?style=for-the-badge&logo=github)](https://makportx.github.io/portfolio/)
+[![Django](https://img.shields.io/badge/Django-6.1-emerald?style=for-the-badge&logo=django)](https://djangoproject.com)
+[![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-blue?style=for-the-badge&logo=githubactions)](https://github.com/makportx/portfolio/actions)
+
+🌐 **Live Demo URL**: [https://makportx.github.io/portfolio/](https://makportx.github.io/portfolio/)
+
 A dynamic, production-ready personal portfolio web application built with **Django 6**, **Tailwind CSS**, and **SQLite**. Fully customized and populated with **Isrel's** resume (B.Tech in Computer Science with Data Science specialization at SRMIST).
 
 ---
+
 
 ## 🌟 Key Features
 
