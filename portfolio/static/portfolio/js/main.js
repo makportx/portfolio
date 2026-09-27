@@ -141,6 +141,27 @@ document.addEventListener('DOMContentLoaded', () => {
             aiMessages.scrollTop = aiMessages.scrollHeight;
         }
 
+        function getClientAIResponse(query) {
+            const q = (query || '').toLowerCase();
+            if (['education', 'college', 'university', 'srm', 'degree', 'study', 'graduat'].some(k => q.includes(k))) {
+                return "🎓 **Education Background**:\nIsrel is currently pursuing a **B.Tech in Computer Science (Data Science specialization)** at **SRM Institute of Science and Technology (SRMIST)**, Chennai.\nExpected graduation is **May 2029**.";
+            } else if (['skill', 'stack', 'tech', 'language', 'python', 'django', 'react', 'tools'].some(k => q.includes(k))) {
+                return "💻 **Technical Skills**:\n• **Web Development**: Django, HTML5, CSS3, JavaScript, React\n• **Programming**: Python, C/C++ (basics)\n• **Data Science**: Data Analysis, Data Visualization (pandas, matplotlib), Computer Vision (OpenCV)\n• **Tools**: Git, GitHub, VS Code, Django Admin & ORM";
+            } else if (['project', 'face recognition', 'attendance', 'dashboard', 'assistant', 'work'].some(k => q.includes(k))) {
+                return "🚀 **Key Projects**:\n\n1. **Face Recognition Attendance System**: AI-powered biometric attendance tracker using OpenCV (cv2) with a Tkinter GUI.\n2. **Portfolio Website with AI Assistant**: Multi-page portfolio with React, Node.js, and an intelligent assistant.\n3. **Data Dashboards**: Interactive data visualization dashboards built using Python (pandas, matplotlib).\n4. **Django Portfolio Application**: Dynamic web app featuring Django ORM models and resume integration.";
+            } else if (['contact', 'email', 'hire', 'reach', 'message', 'phone', 'linkedin', 'location', 'github'].some(k => q.includes(k))) {
+                return "📫 **Get in Touch with Isrel**:\n• **Email**: [makportx@gmail.com](mailto:makportx@gmail.com)\n• **LinkedIn**: [linkedin.com/in/isrel](https://linkedin.com/in/isrel)\n• **GitHub**: [github.com/makportx](https://github.com/makportx)\n• **Location**: Chennai, Tamil Nadu, India\n\nYou can also use the contact form on this page to send a direct message!";
+            } else if (['strength', 'advantage', 'mindset', 'soft skill'].some(k => q.includes(k))) {
+                return "⭐ **Core Strengths**:\n✔ Strong problem-solving mindset\n✔ Quick adaptability to new technologies\n✔ Passion for merging design aesthetics with solid engineering\n✔ Interest in software development and data-driven insights";
+            } else if (['goal', 'career', 'objective', 'future'].some(k => q.includes(k))) {
+                return "🎯 **Career Objective**:\nTo grow as a Web Developer & Data Scientist, contributing to innovative projects that combine creativity, data, and technology while continuously learning in a dynamic environment.";
+            } else if (['hi', 'hello', 'hey', 'who are you'].some(k => q.includes(k))) {
+                return "👋 Hi there! I'm Isrel's AI Portfolio Assistant.\nYou can ask me about:\n• Isrel's projects (Face Recognition, Dashboards, Web apps)\n• Education at SRMIST\n• Technical skills in Python, Django, React, and Data Science\n• How to contact Isrel";
+            } else {
+                return "Thanks for asking! Isrel is an aspiring Web Developer & Data Science enthusiast studying at SRMIST with strong skills in Python, Django, React, and Data Science.\n\nFeel free to ask about his projects, education, technical skills, or send him an email at [makportx@gmail.com](mailto:makportx@gmail.com)!";
+            }
+        }
+
         async function sendQuery(queryText) {
             if (!queryText.trim()) return;
 
@@ -166,17 +187,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ query: queryText }),
                 });
 
+                if (!response.ok) {
+                    throw new Error('API unavailable');
+                }
+
                 const data = await response.json();
                 typingIndicator.remove();
 
-                if (data.response) {
+                if (data && data.response) {
                     appendMessage('ai', data.response);
                 } else {
-                    appendMessage('ai', "I'm sorry, I couldn't process that. Feel free to contact Isrel directly!");
+                    appendMessage('ai', getClientAIResponse(queryText));
                 }
             } catch (err) {
                 if (typingIndicator) typingIndicator.remove();
-                appendMessage('ai', "Thanks for reaching out! You can check out Isrel's projects or message him using the form below.");
+                appendMessage('ai', getClientAIResponse(queryText));
             }
         }
 
@@ -198,6 +223,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 const query = chip.getAttribute('data-prompt') || chip.innerText.trim();
                 sendQuery(query);
             });
+        });
+    }
+
+    // 6. Contact Form Static Fallback Support
+    const contactForm = document.querySelector('form[action*="#contact"]');
+    if (contactForm && (window.location.hostname.endsWith('github.io') || window.location.protocol === 'file:')) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = (contactForm.querySelector('[name=name]')?.value || '').trim();
+            const email = (contactForm.querySelector('[name=email]')?.value || '').trim();
+            const subject = (contactForm.querySelector('[name=subject]')?.value || 'Portfolio Contact').trim();
+            const message = (contactForm.querySelector('[name=message]')?.value || '').trim();
+
+            const mailtoUrl = `mailto:makportx@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('From: ' + name + ' (' + email + ')\n\n' + message)}`;
+            
+            // Insert confirmation banner above button
+            let statusBanner = document.getElementById('contact-status-banner');
+            if (!statusBanner) {
+                statusBanner = document.createElement('div');
+                statusBanner.id = 'contact-status-banner';
+                statusBanner.className = 'p-4 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm mb-4';
+                contactForm.insertBefore(statusBanner, contactForm.querySelector('button[type=submit]'));
+            }
+            statusBanner.innerHTML = `✓ Opening your email client to send your message to <strong>makportx@gmail.com</strong>...<br/><a href="${mailtoUrl}" class="underline text-cyan-400 font-semibold mt-1 inline-block">Click here if your mail app didn't open automatically</a>`;
+            
+            window.location.href = mailtoUrl;
         });
     }
 });
