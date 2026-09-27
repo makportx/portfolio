@@ -1,0 +1,177 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block title %}Resume | {{ profile.name }}{% endblock %}
+
+{% block content %}
+<div class="py-8 sm:py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        
+        <!-- Header Controls (Hidden during print) -->
+        <div class="no-print flex flex-wrap items-center justify-between gap-4 mb-8 pb-4 border-b border-slate-800">
+            <a href="{% url 'home' %}" class="inline-flex items-center text-xs font-semibold text-slate-400 hover:text-cyan-400 transition space-x-1.5">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span>Return to Portfolio</span>
+            </a>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="window.print()" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950 hover:bg-cyan-400 transition shadow-lg shadow-cyan-500/25 flex items-center space-x-2">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    <span>Print / Save as PDF</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Printable Document Canvas -->
+        <div class="print-container bg-white text-slate-900 rounded-3xl p-8 sm:p-14 shadow-2xl border border-slate-200">
+            
+            <!-- Resume Header with Professional Photo -->
+            <div class="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6 pb-8 border-b border-slate-300">
+                <div class="text-center sm:text-left flex-grow">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-950 uppercase">
+                        {{ profile.name }}
+                    </h1>
+                    <p class="text-base sm:text-lg font-semibold text-slate-700 mt-1">
+                        {{ profile.title }}
+                    </p>
+                    <div class="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-xs text-slate-600 mt-3">
+                        <span class="inline-flex items-center gap-1">
+                            <span>📍</span> {{ profile.location }}
+                        </span>
+                        <span class="text-slate-400">&bull;</span>
+                        <span class="inline-flex items-center gap-1">
+                            <span>✉</span> <a href="mailto:{{ profile.email }}" class="hover:underline text-cyan-800 font-medium">{{ profile.email }}</a>
+                        </span>
+                        <span class="text-slate-400">&bull;</span>
+                        <span class="inline-flex items-center gap-1">
+                            <span>🔗</span> <a href="{{ profile.linkedin }}" target="_blank" class="hover:underline text-cyan-800 font-medium">linkedin.com/in/isrel</a>
+                        </span>
+                        <span class="text-slate-400">&bull;</span>
+                        <span class="inline-flex items-center gap-1">
+                            <span>🐙</span> <a href="{{ profile.github }}" target="_blank" class="hover:underline text-cyan-800 font-medium">github.com/makportx</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="flex-shrink-0">
+                    <div class="p-1 rounded-full bg-gradient-to-tr from-cyan-600 via-teal-600 to-indigo-600 shadow-md">
+                        <img src="{% static 'portfolio/images/isrel_profile.jpg' %}" alt="{{ profile.name }}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover object-top border-2 border-white">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Section -->
+            <div class="py-6 border-b border-slate-200">
+                <h2 class="text-base font-bold uppercase tracking-wider text-slate-900 mb-2.5 flex items-center gap-2">
+                    Summary
+                </h2>
+                <p class="text-sm text-slate-700 leading-relaxed">
+                    {{ profile.summary }}
+                </p>
+            </div>
+
+            <!-- Education Section -->
+            <div class="py-6 border-b border-slate-200">
+                <h2 class="text-base font-bold uppercase tracking-wider text-slate-900 mb-3">
+                    Education
+                </h2>
+                {% for edu in education_list %}
+                <div class="mb-3">
+                    <div class="flex flex-col sm:flex-row sm:items-baseline justify-between">
+                        <h3 class="font-bold text-sm text-slate-900">{{ edu.institution }}</h3>
+                        <span class="text-xs text-slate-600 font-medium">{{ edu.graduation_date }}</span>
+                    </div>
+                    <p class="text-sm text-slate-700 mt-0.5">
+                        {{ edu.degree }} ({{ edu.specialization }})
+                    </p>
+                </div>
+                {% empty %}
+                <p class="text-sm text-slate-700">SRM Institute of Science and Technology (SRMIST) &bull; B.Tech in Computer Science (Data Science specialization) &bull; Expected Graduation: May 2029</p>
+                {% endfor %}
+            </div>
+
+            <!-- Technical Skills Section -->
+            <div class="py-6 border-b border-slate-200">
+                <h2 class="text-base font-bold uppercase tracking-wider text-slate-900 mb-3">
+                    Technical Skills
+                </h2>
+                <ul class="space-y-1.5 text-sm text-slate-700">
+                    <li class="flex items-start">
+                        <span class="mr-2 text-slate-900 font-bold">&bull;</span>
+                        <span><strong class="text-slate-900">Web Development:</strong> HTML, CSS, JavaScript, React, Django</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-2 text-slate-900 font-bold">&bull;</span>
+                        <span><strong class="text-slate-900">Programming:</strong> Python, C/C++ (basics)</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-2 text-slate-900 font-bold">&bull;</span>
+                        <span><strong class="text-slate-900">Data Science:</strong> Data Analysis, Visualization, Pandas, Matplotlib, OpenCV</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-2 text-slate-900 font-bold">&bull;</span>
+                        <span><strong class="text-slate-900">Tools:</strong> Git/GitHub, VS Code, Django Admin & SQLite</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Projects Section -->
+            <div class="py-6 border-b border-slate-200">
+                <h2 class="text-base font-bold uppercase tracking-wider text-slate-900 mb-3">
+                    Projects
+                </h2>
+                <div class="space-y-4">
+                    {% for project in projects %}
+                    <div>
+                        <div class="flex items-baseline space-x-2">
+                            <span class="text-slate-900 font-bold">&bull;</span>
+                            <span class="text-sm">
+                                <strong class="text-slate-900">{{ project.title }}</strong> &ndash; {{ project.description }}
+                            </span>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-sm text-slate-700">Projects will appear here.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Strengths Section -->
+            <div class="py-6 border-b border-slate-200">
+                <h2 class="text-base font-bold uppercase tracking-wider text-slate-900 mb-3">
+                    Strengths
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-700">
+                    {% for s in strengths %}
+                    <div class="flex items-center space-x-2">
+                        <span class="text-emerald-700 font-bold">✔</span>
+                        <span>{{ s.title }}</span>
+                    </div>
+                    {% empty %}
+                    <div class="flex items-center space-x-2"><span>✔ Strong problem-solving mindset</span></div>
+                    <div class="flex items-center space-x-2"><span>✔ Quick adaptability to new technologies</span></div>
+                    <div class="flex items-center space-x-2"><span>✔ Passion for merging design and functionality</span></div>
+                    <div class="flex items-center space-x-2"><span>✔ Interest in both development & data insights</span></div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Career Objective Section -->
+            <div class="pt-6">
+                <h2 class="text-base font-bold uppercase tracking-wider text-slate-900 mb-2">
+                    Career Objective
+                </h2>
+                <p class="text-sm text-slate-700 leading-relaxed">
+                    {{ profile.career_objective }}
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Back to Top / Print hint (Hidden during print) -->
+        <div class="no-print mt-8 text-center text-xs text-slate-500">
+            Tip: Click the "Print / Save as PDF" button above or press <kbd class="px-2 py-1 rounded bg-slate-800 text-slate-300 font-mono">Cmd + P</kbd> / <kbd class="px-2 py-1 rounded bg-slate-800 text-slate-300 font-mono">Ctrl + P</kbd> to save a clean PDF copy.
+        </div>
+
+    </div>
+</div>
+{% endblock %}
